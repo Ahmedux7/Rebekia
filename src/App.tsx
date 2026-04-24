@@ -10,6 +10,7 @@ import HowItWorks from './components/HowItWorks';
 import Ambassadors from './components/Ambassadors';
 import JoinAmbassador from './components/JoinAmbassador';
 import Footer from './components/Footer';
+import FloatingRequestButton from './components/FloatingRequestButton';
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
         <JoinAmbassador />
       </main>
       <Footer />
+      <FloatingRequestButton />
     </div>
   );
 }
