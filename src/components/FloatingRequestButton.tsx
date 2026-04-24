@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function FloatingRequestButton() {
+export default function FloatingRequestButton({ onOpenRequest }: { onOpenRequest: () => void }) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -23,10 +23,7 @@ export default function FloatingRequestButton() {
     <div className="md:hidden fixed bottom-5 left-4 right-4 z-50">
       <button 
         className="w-full bg-green-700 text-white py-4 rounded-xl font-bold text-lg shadow-xl hover:bg-green-800 transition-all flex items-center justify-center gap-2"
-        onClick={() => {
-            // Functionality for button click (perhaps scroll to request section or anchor)
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }}
+        onClick={onOpenRequest}
       >
         اطلب سفير الآن
       </button>

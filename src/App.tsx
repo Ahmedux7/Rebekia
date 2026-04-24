@@ -11,19 +11,23 @@ import Ambassadors from './components/Ambassadors';
 import JoinAmbassador from './components/JoinAmbassador';
 import Footer from './components/Footer';
 import FloatingRequestButton from './components/FloatingRequestButton';
+import RequestFormModal from './components/RequestFormModal';
 
 export default function App() {
+  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
+
   return (
     <div dir="rtl" className="min-h-screen bg-gray-50 flex flex-col font-sans">
       <Navbar />
       <main className="flex-grow">
-        <Hero onRequestClick={() => {}} />
+        <Hero onRequestClick={() => setIsRequestModalOpen(true)} />
         <HowItWorks />
         <Ambassadors />
         <JoinAmbassador />
       </main>
       <Footer />
-      <FloatingRequestButton />
+      <FloatingRequestButton onOpenRequest={() => setIsRequestModalOpen(true)} />
+      <RequestFormModal isOpen={isRequestModalOpen} onClose={() => setIsRequestModalOpen(false)} />
     </div>
   );
 }
