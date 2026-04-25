@@ -2,7 +2,7 @@ import { DollarSign, Clock, BookOpen } from 'lucide-react';
 
 export default function JoinAmbassador() {
   return (
-    <section className="py-16 bg-gray-50">
+    <section id="join-ambassador" className="py-16 bg-gray-50">
       <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
         
         {/* Features side */}
@@ -31,13 +31,7 @@ export default function JoinAmbassador() {
           <form className="space-y-4">
             <input type="text" placeholder="الاسم" className="w-full p-3 border border-gray-100 rounded-xl bg-gray-50" />
             <input type="text" placeholder="واتساب" className="w-full p-3 border border-gray-100 rounded-xl bg-gray-50" />
-            <select className="w-full p-3 border border-gray-100 rounded-xl bg-gray-50"><option>المنطقة</option></select>
-            
-            <div className="flex justify-center my-4">
-              <div className="h-24 w-32 bg-gray-50 rounded-lg flex items-center justify-center text-gray-400 text-sm border-dashed border-2 border-gray-200">
-                صورة المعدات
-              </div>
-            </div>
+            <input type="text" placeholder="المنطقة" className="w-full p-3 border border-gray-100 rounded-xl bg-gray-50" />
             
             <button className="w-full bg-green-700 text-white py-3 rounded-xl font-bold hover:bg-green-800 transition-colors">ارسل طلب الانضمام</button>
           </form>

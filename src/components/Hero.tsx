@@ -15,8 +15,8 @@ export default function Hero({ onRequestClick }: { onRequestClick: () => void })
             اطلب سفير الآن
           </button>
         </div>
-        <div className="flex-1 flex justify-center md:justify-end">
-          <img src="https://i.ibb.co/Ngm6ddrH/Gemini-Generated-Image-ekxdxbekxdxbekxd-removebg-preview.png" alt="Agent" className="h-64 md:h-[500px] w-full max-w-lg object-contain rounded-2xl shadow-xl" />
+        <div className="flex-1 flex justify-center">
+          <img src="https://i.ibb.co/Ngm6ddrH/Gemini-Generated-Image-ekxdxbekxdxbekxd-removebg-preview.png" alt="Agent" className="h-72 md:h-[600px] w-full max-w-2xl object-contain" />
         </div>
       </div>
     </div>

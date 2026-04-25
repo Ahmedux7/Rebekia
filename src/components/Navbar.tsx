@@ -13,7 +13,7 @@ export default function Navbar() {
           <a href="#" className="hover:text-green-600">سفراؤنا</a>
         </div>
         <div className="flex gap-2">
-          <button className="bg-green-700 text-white px-3 md:px-4 py-2 rounded-lg hover:bg-green-800 text-sm md:text-base">انضم ك سفير</button>
+          <a href="#join-ambassador" className="bg-green-700 text-white px-3 md:px-4 py-2 rounded-lg hover:bg-green-800 text-sm md:text-base">انضم ك سفير</a>
         </div>
       </div>
     </nav>
