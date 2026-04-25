@@ -27,6 +27,7 @@ export default function CheckoutPage({ onBack }: { onBack: () => void }) {
   const [quantities, setQuantities] = useState<Record<number, number>>({});
   const [exchangeOption, setExchangeOption] = useState<'cash' | 'food' | null>(null);
   const [selectedFoodItems, setSelectedFoodItems] = useState<Record<number, number>>({});
+  const [insufficientPointsWarning, setInsufficientPointsWarning] = useState(false);
   const [showPhoneError, setShowPhoneError] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
@@ -57,10 +58,14 @@ export default function CheckoutPage({ onBack }: { onBack: () => void }) {
       const newFoodPoints = foodPoints - (currentQuantity * itemPoints) + (newQuantity * itemPoints);
       
       if (newFoodPoints <= totalPoints) {
+        setInsufficientPointsWarning(false);
         setSelectedFoodItems(prev => ({
             ...prev,
             [id]: newQuantity
         }));
+      } else if (newQuantity > currentQuantity) {
+        setInsufficientPointsWarning(true);
+        setTimeout(() => setInsufficientPointsWarning(false), 3000);
       }
   };
 
@@ -212,7 +217,10 @@ export default function CheckoutPage({ onBack }: { onBack: () => void }) {
                <p className="font-bold text-lg pt-2">اختر طريقة السحب:</p>
                <div className="grid grid-cols-2 gap-4">
                  <button 
-                   onClick={() => setExchangeOption('cash')}
+                   onClick={() => {
+                    setExchangeOption('cash');
+                    setSelectedFoodItems({});
+                  }}
                    className={`p-4 rounded-xl border-2 font-bold ${exchangeOption === 'cash' ? 'border-green-700 bg-green-50' : 'border-gray-200'}`}
                  >
                    تحويل لكاش
@@ -244,6 +252,9 @@ export default function CheckoutPage({ onBack }: { onBack: () => void }) {
                    {FOOD_ITEMS.filter(item => item.points <= totalPoints).length === 0 && (
                      <p className="text-red-500 font-bold">عذراً، نقاطك لا تكفي لاي سلعة غذائية</p>
                    )}
+                {insufficientPointsWarning && (
+                  <p className="text-red-500 font-bold text-center">عذراً، نقاطك لا تكفي لإضافة المزيد من السلع.</p>
+                )}
                  </div>
                )}
                
