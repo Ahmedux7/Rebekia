@@ -125,7 +125,7 @@ export default function CheckoutPage({ onBack }: { onBack: () => void }) {
                     <div className="flex gap-4 items-center justify-between">
                       <button 
                         onClick={nextStep} 
-                        className="flex-1 bg-green-500 text-white p-4 rounded-full font-bold text-lg hover:bg-green-600 transition">
+                        className="flex-1 bg-green-700 text-white p-4 rounded-full font-bold text-lg hover:bg-green-800 transition">
                           تبديل
                       </button>
                       <div className="flex-1 bg-green-50 border border-green-100 p-4 rounded-full text-center font-bold text-green-700">
@@ -174,7 +174,7 @@ export default function CheckoutPage({ onBack }: { onBack: () => void }) {
                 
                 <div className="flex gap-4">
                     <button onClick={() => setStep(1)} className="w-full bg-gray-200 p-4 rounded-xl font-bold">السابق</button>
-                    <button onClick={nextStep} className="w-full bg-green-800 text-white p-4 rounded-xl font-bold">مراجعة الطلب</button>
+                    <button onClick={nextStep} className="w-full bg-green-700 text-white p-4 rounded-xl font-bold hover:bg-green-800 transition-colors">مراجعة الطلب</button>
                 </div>
             </div>
         )}
@@ -197,13 +197,13 @@ export default function CheckoutPage({ onBack }: { onBack: () => void }) {
                <div className="grid grid-cols-2 gap-4">
                  <button 
                    onClick={() => setExchangeOption('cash')}
-                   className={`p-4 rounded-xl border-2 font-bold ${exchangeOption === 'cash' ? 'border-green-600 bg-green-50' : 'border-gray-200'}`}
+                   className={`p-4 rounded-xl border-2 font-bold ${exchangeOption === 'cash' ? 'border-green-700 bg-green-50' : 'border-gray-200'}`}
                  >
                    تحويل لكاش
                  </button>
                  <button 
                    onClick={() => setExchangeOption('food')}
-                   className={`p-4 rounded-xl border-2 font-bold ${exchangeOption === 'food' ? 'border-green-600 bg-green-50' : 'border-gray-200'}`}
+                   className={`p-4 rounded-xl border-2 font-bold ${exchangeOption === 'food' ? 'border-green-700 bg-green-50' : 'border-gray-200'}`}
                  >
                    سلع غذائية
                  </button>
@@ -275,7 +275,7 @@ export default function CheckoutPage({ onBack }: { onBack: () => void }) {
                 <p className="text-md text-gray-500 mt-3">السفير المتواجد على بعد 1 كيلومتر فقط.</p>
                 <p className="text-md text-gray-500 mt-1">سوف يتواصل معك السفير في أقرب وقت.</p>
             </div>
-            <button onClick={onBack} className="w-full bg-green-600 text-white py-4 rounded-xl font-bold text-lg">
+            <button onClick={onBack} className="w-full bg-green-700 text-white py-4 rounded-xl font-bold text-lg hover:bg-green-800 transition-colors">
                 العودة
             </button>
           </div>

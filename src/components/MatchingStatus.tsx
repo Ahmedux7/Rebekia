@@ -19,7 +19,7 @@ export default function MatchingStatus() {
             <p className="text-xs text-gray-400">الموعد المقترح: بعد 30 دقيقة</p>
           </div>
         </div>
-        <button className="w-full mt-4 bg-green-600 text-white py-2 rounded-lg">تأكيد الموعد عبر واتساب</button>
+        <button className="w-full mt-4 bg-green-700 text-white py-2 rounded-lg hover:bg-green-800 transition-colors">تأكيد الموعد عبر واتساب</button>
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ export default function WasteForm({ onSubmit }: { onSubmit: () => void }) {
       <div className="flex justify-between items-center mb-6 gap-2">
         {[1, 2, 3].map((s) => (
           <div key={s} className="flex-1 flex flex-col items-center gap-1">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${s === step ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-400'}`}>
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${s === step ? 'bg-green-700 text-white' : 'bg-gray-100 text-gray-400'}`}>
               {s}
             </div>
             <span className={`text-xs ${s === step ? 'text-green-700 font-bold' : 'text-gray-400'}`}>
@@ -53,7 +53,7 @@ export default function WasteForm({ onSubmit }: { onSubmit: () => void }) {
           <div className="grid grid-cols-3 gap-2">
              {['بلاستيك', 'ورق', 'إلكترونيات'].map(type => (
                <label key={type} className="flex items-center gap-1 p-2 border rounded-xl cursor-pointer hover:bg-gray-50 text-xs">
-                 <input type="checkbox" className="size-4 accent-green-600" />
+                 <input type="checkbox" className="size-4 accent-green-700" />
                  {type}
                </label>
              ))}
@@ -64,15 +64,15 @@ export default function WasteForm({ onSubmit }: { onSubmit: () => void }) {
           <label className="block text-sm font-semibold text-gray-700 mb-1">الوزن التقريبي</label>
           <div className="flex gap-4">
             <label className="flex items-center gap-2 text-sm">
-              <input type="radio" name="weight" className="size-4 accent-green-600" /> أقل من 5 كجم
+              <input type="radio" name="weight" className="size-4 accent-green-700" /> أقل من 5 كجم
             </label>
             <label className="flex items-center gap-2 text-sm">
-              <input type="radio" name="weight" className="size-4 accent-green-600" /> أكثر من 5 كجم
+              <input type="radio" name="weight" className="size-4 accent-green-700" /> أكثر من 5 كجم
             </label>
           </div>
         </div>
 
-        <button onClick={onSubmit} className="w-full bg-green-950 text-white py-3 rounded-xl font-bold hover:bg-green-900 transition-colors">تأكيد الطلب</button>
+        <button onClick={onSubmit} className="w-full bg-green-700 text-white py-3 rounded-xl font-bold hover:bg-green-800 transition-colors">تأكيد الطلب</button>
       </div>
     </div>
   );

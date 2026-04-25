@@ -9,7 +9,7 @@ export default function Hero({ onRequestClick }: { onRequestClick: () => void })
           <p className="text-lg md:text-xl text-green-100">نظام ذكي يربطك بأقرب سفير معتمد في منطقتك لجمع المخلفات وإعطائك مكافآت فورية.</p>
           <button 
             onClick={onRequestClick}
-            className="flex items-center gap-2 bg-green-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-green-400 transition-colors shadow-lg"
+            className="flex items-center gap-2 bg-green-700 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-green-800 transition-colors shadow-lg"
           >
             <PhoneCall size={20} />
             اطلب سفير الآن
