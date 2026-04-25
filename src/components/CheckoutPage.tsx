@@ -15,9 +15,18 @@ const WASTE_ITEMS = [
     { id: 11, name: 'كتب', points: 8, category: 'ورق', image: 'https://cdn-icons-png.flaticon.com/128/2921/2921761.png' },
 ];
 
+const FOOD_ITEMS = [
+    { id: 101, name: 'سكر', points: 40 },
+    { id: 102, name: 'زيت', points: 60 },
+    { id: 103, name: 'مكرونة', points: 20 },
+    { id: 104, name: 'منظفات', points: 30 },
+];
+
 export default function CheckoutPage({ onBack }: { onBack: () => void }) {
   const [step, setStep] = useState(1);
   const [quantities, setQuantities] = useState<Record<number, number>>({});
+  const [exchangeOption, setExchangeOption] = useState<'cash' | 'food' | null>(null);
+  const [selectedFoodItem, setSelectedFoodItem] = useState<number | null>(null);
   const [showPhoneError, setShowPhoneError] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
@@ -39,15 +48,21 @@ export default function CheckoutPage({ onBack }: { onBack: () => void }) {
       }));
   };
 
+
   const nextStep = () => {
     const newErrors: Record<string, string> = {};
     if (step === 1) {
-        if (totalPoints < 500) newErrors.waste = 'الحد الأدنى لطلب الاوردر هو: 500 نقطة';
+        if (totalPoints < 50) newErrors.waste = 'الحد الأدنى لطلب الاوردر هو: 50 نقطة';
     } else if (step === 2) {
         if (!formData.name) newErrors.name = 'يرجى إدخال الاسم';
         if (!validatePhone(formData.phone)) newErrors.phone = 'رقم الواتساب غير صحيح';
         if (formData.region === '' || formData.region === 'المنطقة') newErrors.region = 'يرجى اختيار المنطقة';
         if (!formData.address) newErrors.address = 'يرجى إدخال العنوان';
+    } else if (step === 3) {
+        if (!exchangeOption) newErrors.exchange = 'يرجى اختيار طريقة الاستبدال';
+        else if (exchangeOption === 'food' && !selectedFoodItem) newErrors.exchange = 'يرجى اختيار السلعة الغذائية';
+    } else if (step === 4) {
+        // Validation for step 4 if needed
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -68,13 +83,13 @@ export default function CheckoutPage({ onBack }: { onBack: () => void }) {
         </button>
 
         <div className="flex justify-between items-center mb-6">
-            {[1, 2, 3, 4].map((s) => (
+            {[1, 2, 3, 4, 5].map((s) => (
                 <div key={s} className="flex-1 flex flex-col items-center">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${s <= step ? 'bg-green-700 text-white' : 'bg-gray-200 text-gray-500'}`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${s <= step ? 'bg-green-700 text-white' : 'bg-gray-200 text-gray-500'}`}>
                     {s}
                     </div>
-                    <span className="text-sm mt-1 font-bold text-gray-700">
-                    {s === 1 ? 'مخلفات' : s === 2 ? 'بيانات' : s === 3 ? 'مراجعة' : 'سفير'}
+                    <span className="text-xs mt-1 font-bold text-gray-600">
+                    {s === 1 ? 'مخلفات' : s === 2 ? 'بيانات' : s === 3 ? 'محفظة' : s === 4 ? 'مراجعة' : 'سفير'}
                     </span>
                 </div>
             ))}
@@ -117,7 +132,7 @@ export default function CheckoutPage({ onBack }: { onBack: () => void }) {
                         اجمالي : {totalPoints} نقطة
                       </div>
                     </div>
-                    <p className="text-red-600 text-sm font-bold text-center mt-2">الحد الأدنى لطلب الاوردر هو: 500 نقطة</p>
+                    <p className="text-red-600 text-sm font-bold text-center mt-2">الحد الأدنى لطلب الاوردر هو: 50 نقطة</p>
                 </div>
             </div>
         )}
@@ -165,6 +180,65 @@ export default function CheckoutPage({ onBack }: { onBack: () => void }) {
         )}
 
         {step === 3 && (
+             <div className="space-y-4">
+               <h2 className="text-2xl font-bold">محفظتك</h2>
+               <div className="border rounded-2xl p-6 bg-green-50 space-y-4">
+                   <div className="text-center">
+                       <p className="text-gray-600 text-lg">نقاطك الحالية</p>
+                       <p className="text-4xl font-bold text-green-800">{totalPoints} نقطة</p>
+                   </div>
+                   <div className="text-center">
+                       <p className="text-gray-600 text-lg">ما يعادل كاش</p>
+                       <p className="text-4xl font-bold text-green-800">{(totalPoints * 0.1).toFixed(2)} ج.م</p>
+                   </div>
+               </div>
+               
+               <p className="font-bold text-lg pt-2">اختر طريقة السحب:</p>
+               <div className="grid grid-cols-2 gap-4">
+                 <button 
+                   onClick={() => setExchangeOption('cash')}
+                   className={`p-4 rounded-xl border-2 font-bold ${exchangeOption === 'cash' ? 'border-green-600 bg-green-50' : 'border-gray-200'}`}
+                 >
+                   تحويل لكاش
+                 </button>
+                 <button 
+                   onClick={() => setExchangeOption('food')}
+                   className={`p-4 rounded-xl border-2 font-bold ${exchangeOption === 'food' ? 'border-green-600 bg-green-50' : 'border-gray-200'}`}
+                 >
+                   سلع غذائية
+                 </button>
+               </div>
+               
+               {exchangeOption === 'food' && (
+                 <div className="space-y-2 pt-2">
+                   <p className="font-bold">اختر السلعة:</p>
+                   <div className="grid grid-cols-2 gap-4">
+                     {FOOD_ITEMS.filter(item => item.points <= totalPoints).map(item => (
+                       <button
+                         key={item.id}
+                         onClick={() => setSelectedFoodItem(item.id)}
+                         className={`p-4 rounded-xl border-2 font-bold ${selectedFoodItem === item.id ? 'border-green-600 bg-green-50' : 'border-gray-200'}`}
+                       >
+                         {item.name} ({item.points} نقطة)
+                       </button>
+                     ))}
+                   </div>
+                   {FOOD_ITEMS.filter(item => item.points <= totalPoints).length === 0 && (
+                     <p className="text-red-500 font-bold">عذراً، نقاطك لا تكفي لاي سلعة غذائية</p>
+                   )}
+                 </div>
+               )}
+               
+               {Object.values(errors).length > 0 && <div className='text-red-500 text-sm'>{Object.values(errors).map(e => <p key={e}>{e}</p>)}</div>}
+               
+               <div className="flex gap-4 pt-4">
+                   <button onClick={() => setStep(2)} className="w-full bg-gray-200 p-4 rounded-xl font-bold">السابق</button>
+                   <button onClick={nextStep} className="w-full bg-green-800 text-white p-4 rounded-xl font-bold">متابعة</button>
+               </div>
+           </div>
+       )}
+
+        {step === 4 && (
             <div className="space-y-4">
                <h2 className="text-2xl font-bold">مراجعة الطلب</h2>
                <div className="border rounded-2xl p-4 bg-gray-50 space-y-3">
@@ -176,6 +250,8 @@ export default function CheckoutPage({ onBack }: { onBack: () => void }) {
                    </div>
                    <hr/>
                    <p className="font-bold text-green-700">اجمالي النقاط: {totalPoints} نقطة</p>
+                   <p className="font-bold text-green-700">القيمة النقدية: {(totalPoints * 0.1).toFixed(2)} ج.م</p>
+                   <p className="font-bold text-green-700">طريقة الاستبدال: {exchangeOption === 'cash' ? 'كاش' : ('سلع غذائية' + (selectedFoodItem ? ' (' + FOOD_ITEMS.find(f => f.id === selectedFoodItem)?.name + ')' : ''))}</p>
                    <hr/>
                    <p className="font-bold text-gray-700">الاسم: {formData.name}</p>
                    <p className="font-bold text-gray-700">التليفون: {formData.phone}</p>
@@ -183,13 +259,13 @@ export default function CheckoutPage({ onBack }: { onBack: () => void }) {
                </div>
                
                <div className="flex gap-4">
-                   <button onClick={() => setStep(2)} className="w-full bg-gray-200 p-4 rounded-xl font-bold">السابق</button>
+                   <button onClick={() => setStep(3)} className="w-full bg-gray-200 p-4 rounded-xl font-bold">السابق</button>
                    <button onClick={nextStep} className="w-full bg-green-800 text-white p-4 rounded-xl font-bold">تأكيد الطلب</button>
                </div>
            </div>
        )}
 
-        {step === 4 && (
+        {step === 5 && (
           <div className="text-center space-y-4 py-8">
             <div className="bg-green-50 p-6 md:p-8 rounded-3xl border-2 border-green-200">
                 <h3 className="text-2xl font-bold text-green-900 mb-6">تم تخصيص سفيرك!</h3>
