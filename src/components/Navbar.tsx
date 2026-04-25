@@ -5,8 +5,7 @@ export default function Navbar() {
     <nav className="bg-white border-b sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Leaf className="text-green-600 size-8" />
-          <span className="text-2xl font-bold text-green-800">ريبكيا</span>
+          <img src="https://i.ibb.co/99cYLyv7/5-removebg-preview.png" alt="Rebekia Logo" className="h-16 w-auto" />
         </div>
         <div className="hidden md:flex gap-4 md:gap-6 text-gray-700 text-sm md:text-base">
           <a href="#" className="hover:text-green-600">الرئيسية</a>
