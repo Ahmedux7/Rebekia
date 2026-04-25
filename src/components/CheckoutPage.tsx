@@ -26,7 +26,7 @@ export default function CheckoutPage({ onBack }: { onBack: () => void }) {
   const [step, setStep] = useState(1);
   const [quantities, setQuantities] = useState<Record<number, number>>({});
   const [exchangeOption, setExchangeOption] = useState<'cash' | 'food' | null>(null);
-  const [selectedFoodItem, setSelectedFoodItem] = useState<number | null>(null);
+  const [selectedFoodItems, setSelectedFoodItems] = useState<Record<number, number>>({});
   const [showPhoneError, setShowPhoneError] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
@@ -38,6 +38,8 @@ export default function CheckoutPage({ onBack }: { onBack: () => void }) {
   });
 
   const totalPoints = WASTE_ITEMS.reduce((sum, item) => sum + (quantities[item.id] || 0) * item.points, 0);
+  const foodPoints = Object.entries(selectedFoodItems).reduce((sum, [id, q]) => sum + (FOOD_ITEMS.find(i => i.id === Number(id))?.points || 0) * q, 0);
+  const remainingPoints = Math.max(0, totalPoints - foodPoints);
 
   const validatePhone = (phone: string) => /^\d{11}$/.test(phone);
 
@@ -46,6 +48,20 @@ export default function CheckoutPage({ onBack }: { onBack: () => void }) {
           ...prev,
           [id]: Math.max(0, (prev[id] || 0) + delta)
       }));
+  };
+
+  const updateFoodQuantity = (id: number, delta: number) => {
+      const itemPoints = FOOD_ITEMS.find(i => i.id === id)?.points || 0;
+      const currentQuantity = selectedFoodItems[id] || 0;
+      const newQuantity = Math.max(0, currentQuantity + delta);
+      const newFoodPoints = foodPoints - (currentQuantity * itemPoints) + (newQuantity * itemPoints);
+      
+      if (newFoodPoints <= totalPoints) {
+        setSelectedFoodItems(prev => ({
+            ...prev,
+            [id]: newQuantity
+        }));
+      }
   };
 
 
@@ -60,7 +76,7 @@ export default function CheckoutPage({ onBack }: { onBack: () => void }) {
         if (!formData.address) newErrors.address = 'يرجى إدخال العنوان';
     } else if (step === 3) {
         if (!exchangeOption) newErrors.exchange = 'يرجى اختيار طريقة الاستبدال';
-        else if (exchangeOption === 'food' && !selectedFoodItem) newErrors.exchange = 'يرجى اختيار السلعة الغذائية';
+        else if (exchangeOption === 'food' && foodPoints === 0) newErrors.exchange = 'يرجى اختيار السلعة الغذائية';
     } else if (step === 4) {
         // Validation for step 4 if needed
     }
@@ -214,13 +230,15 @@ export default function CheckoutPage({ onBack }: { onBack: () => void }) {
                    <p className="font-bold">اختر السلعة:</p>
                    <div className="grid grid-cols-2 gap-4">
                      {FOOD_ITEMS.filter(item => item.points <= totalPoints).map(item => (
-                       <button
-                         key={item.id}
-                         onClick={() => setSelectedFoodItem(item.id)}
-                         className={`p-4 rounded-xl border-2 font-bold ${selectedFoodItem === item.id ? 'border-green-600 bg-green-50' : 'border-gray-200'}`}
-                       >
-                         {item.name} ({item.points} نقطة)
-                       </button>
+                        <div key={item.id} className="border rounded-xl p-3 flex flex-col items-center">
+                            <h3 className="font-bold text-sm mb-1">{item.name}</h3>
+                            <span className="text-xs text-gray-500 mb-2">{item.points} نقطة</span>
+                            <div className="flex items-center gap-2 bg-gray-100 rounded-full px-2 py-1">
+                                <button onClick={() => updateFoodQuantity(item.id, -1)} className="text-gray-500"><Minus size={16} /></button>
+                                <span className="font-bold w-6 text-center">{selectedFoodItems[item.id] || 0}</span>
+                                <button onClick={() => updateFoodQuantity(item.id, 1)} className="text-green-700"><Plus size={16} /></button>
+                            </div>
+                        </div>
                      ))}
                    </div>
                    {FOOD_ITEMS.filter(item => item.points <= totalPoints).length === 0 && (
@@ -250,8 +268,8 @@ export default function CheckoutPage({ onBack }: { onBack: () => void }) {
                    </div>
                    <hr/>
                    <p className="font-bold text-green-700">اجمالي النقاط: {totalPoints} نقطة</p>
-                   <p className="font-bold text-green-700">القيمة النقدية: {(totalPoints * 0.1).toFixed(2)} ج.م</p>
-                   <p className="font-bold text-green-700">طريقة الاستبدال: {exchangeOption === 'cash' ? 'كاش' : ('سلع غذائية' + (selectedFoodItem ? ' (' + FOOD_ITEMS.find(f => f.id === selectedFoodItem)?.name + ')' : ''))}</p>
+                    <p className="font-bold text-green-700">القيمة النقدية: {(remainingPoints * 0.1).toFixed(2)} ج.م</p>
+                    <p className="font-bold text-green-700">طريقة الاستبدال: {exchangeOption === 'cash' ? 'كاش' : ('سلع غذائية (' + Object.entries(selectedFoodItems).filter(([id, q]) => q > 0).map(([id, q]) => `${FOOD_ITEMS.find(f => f.id === Number(id))?.name || 'Unknown'} (x${q})`).join(', ') + ')')}</p>
                    <hr/>
                    <p className="font-bold text-gray-700">الاسم: {formData.name}</p>
                    <p className="font-bold text-gray-700">التليفون: {formData.phone}</p>
